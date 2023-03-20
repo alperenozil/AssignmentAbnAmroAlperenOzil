@@ -8,6 +8,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 
 class PagedRecyclerAdapter : PagingDataAdapter<GithubRepo,
         PagedRecyclerAdapter.GithubRepoViewHolder>(diffCallback) {
@@ -45,17 +46,24 @@ class PagedRecyclerAdapter : PagingDataAdapter<GithubRepo,
 
         holder.binding.apply {
             holder.itemView.apply {
-                textView.text = "${currentRepo?.name}"
-                val imageLink = currentRepo?.owner?.avatar_url
-                /*imageView.load(imageLink) {
+                nameTextView.text = "name: ${currentRepo?.name}"
+                visibilityTextView.text = "visibility: ${currentRepo?.visibility}"
+                publicOrPrivateTextView.text = "public or private: ${currentRepo?.visibility}"
+                avatarImageView.load(currentRepo?.owner?.avatar_url) {
                     crossfade(true)
                     crossfade(1000)
-                }*/
+                }
             }
         }
 
         holder.itemView.setOnClickListener{
-            val bundle = bundleOf("id" to "alperen")
+            val bundle = bundleOf("name" to currentRepo?.name.toString(),
+                "full_name" to currentRepo?.full_name.toString(),
+                "description" to currentRepo?.description.toString(),
+                "avatar" to currentRepo?.owner?.avatar_url.toString(),
+                "visibility" to currentRepo?.visibility.toString(),
+                "publicorprivate" to currentRepo?.visibility.toString(),
+                "html_url" to currentRepo?.html_url.toString())
             findNavController(holder.itemView).navigate(
                 R.id.action_githubReposListFragment_to_githubRepoDetailsFragment,
                 bundle

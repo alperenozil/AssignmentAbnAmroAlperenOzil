@@ -25,7 +25,6 @@ class GithubReposListViewModel @Inject constructor(
     val dataFromDatabase: LiveData<ArrayList<GithubRepo>> = _dataFromDatabase
 
     fun loadDataFromDatabase() {
-        Log.d(TAG, "loadDataFromDatabase: calisti")
         viewModelScope.launch {
             try {
                 _dataFromDatabase.postValue(repoUseCases.getRepos.invoke() as ArrayList<GithubRepo>?)

@@ -22,7 +22,6 @@ class GithubReposPagingSource(
             val response = repoUseCases.getReposFromRemote.invoke(currentPage, 5)
             response.forEach {
                 repoUseCases.addRepo(it)
-                Log.d(TAG, "load remote: $it")
             }
 
             LoadResult.Page(

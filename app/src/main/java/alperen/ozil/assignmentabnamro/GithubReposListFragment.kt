@@ -25,7 +25,6 @@ class GithubReposListFragment : Fragment() {
     private val binding get() = _binding
     private lateinit var pagedRecyclerAdapter: PagedRecyclerAdapter
     private lateinit var localDataRecyclerAdapter: LocalDataRecyclerAdapter
-    private lateinit var connectionLiveData: ConnectionLiveData
     private val viewModel by viewModels<GithubReposListViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,14 +33,13 @@ class GithubReposListFragment : Fragment() {
         _binding = FragmentGithubReposListBinding.inflate(inflater, container, false)
         viewModel.dataFromDatabase.observe(requireActivity()){
             setupRecyclerViewForLocalData(it)
-            Log.d(TAG, "reis datafromdatabase ${it[0]} ")
         }
         if(isOnline(requireContext())){
-            Toast.makeText(requireContext(), "connected", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "connection is active. data coming from remote", Toast.LENGTH_LONG).show()
             setupRecyclerViewForRemoteData()
             showPagedDataFromRemote()
         } else {
-            Toast.makeText(requireContext(), "not connected", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "no connection. data coming from local", Toast.LENGTH_LONG).show()
             viewModel.loadDataFromDatabase()
         }
         return binding?.root
@@ -77,7 +75,7 @@ class GithubReposListFragment : Fragment() {
         _binding = null
     }
 
-    fun isOnline(context: Context): Boolean {
+    private fun isOnline(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (connectivityManager != null) {

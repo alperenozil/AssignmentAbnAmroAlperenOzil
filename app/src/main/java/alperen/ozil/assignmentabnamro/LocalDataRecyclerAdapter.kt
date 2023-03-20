@@ -31,7 +31,7 @@ class LocalDataRecyclerAdapter(private val data: List<GithubRepo>) : RecyclerVie
 
         holder.binding.apply {
             holder.itemView.apply {
-                textView.text = currentRepo.name
+                nameTextView.text = currentRepo.name
                 val imageLink = currentRepo.owner!!.avatar_url
                 /*imageView.load(imageLink) {
                     crossfade(true)
@@ -41,7 +41,13 @@ class LocalDataRecyclerAdapter(private val data: List<GithubRepo>) : RecyclerVie
         }
 
         holder.itemView.setOnClickListener{
-            val bundle = bundleOf("id" to "alperen")
+            val bundle = bundleOf("name" to currentRepo.name.toString(),
+                "full_name" to currentRepo.full_name.toString(),
+                "description" to currentRepo.description.toString(),
+                "avatar" to currentRepo.owner?.avatar_url.toString(),
+                "visibility" to currentRepo.visibility.toString(),
+                "publicorprivate" to currentRepo.visibility.toString(),
+                "html_url" to currentRepo.html_url.toString())
             Navigation.findNavController(holder.itemView).navigate(
                 R.id.action_githubReposListFragment_to_githubRepoDetailsFragment,
                 bundle
