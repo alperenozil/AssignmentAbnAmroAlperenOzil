@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/githubReposListFragment">
+
+    <fragment
+        android:id="@+id/githubReposListFragment"
+        android:name="alperen.ozil.assignmentabnamro.GithubReposListFragment"
+        android:label="Repositories List"
+        tools:layout="@layout/fragment_github_repos_list" >
+        <action
+            android:id="@+id/action_githubReposListFragment_to_githubRepoDetailsFragment"
+            app:destination="@id/githubRepoDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/githubRepoDetailsFragment"
+        android:name="alperen.ozil.assignmentabnamro.GithubRepoDetailsFragment"
+        android:label="Repository Details"
+        tools:layout="@layout/fragment_github_repo_details" >
+        <action
+            android:id="@+id/action_githubRepoDetailsFragment_to_githubReposListFragment"
+            app:destination="@id/githubReposListFragment"
+            app:popUpTo="@id/githubReposListFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>
