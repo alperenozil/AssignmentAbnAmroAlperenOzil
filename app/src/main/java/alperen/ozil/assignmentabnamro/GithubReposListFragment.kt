@@ -1,10 +1,15 @@
 package alperen.ozil.assignmentabnamro
 
 import alperen.ozil.assignmentabnamro.databinding.FragmentGithubReposListBinding
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -27,25 +32,24 @@ class GithubReposListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentGithubReposListBinding.inflate(inflater, container, false)
-
-        setupRecyclerViewForRemoteData()
-        showPagedDataFromRemote()
-        /*if(isOnline(requireContext())){
+        viewModel.dataFromDatabase.observe(requireActivity()){
+            setupRecyclerViewForLocalData(it)
+            Log.d(TAG, "reis datafromdatabase ${it[0]} ")
+        }
+        if(isOnline(requireContext())){
             Toast.makeText(requireContext(), "connected", Toast.LENGTH_SHORT).show()
+            setupRecyclerViewForRemoteData()
+            showPagedDataFromRemote()
         } else {
             Toast.makeText(requireContext(), "not connected", Toast.LENGTH_SHORT).show()
             viewModel.loadDataFromDatabase()
-            viewModel.dataFromDatabase.observe(requireActivity()){
-                setupRecyclerViewForLocalData(it)
-                Log.d(TAG, "reis datafromdatabase $it ")
-            }
-        }*/
+        }
         return binding?.root
     }
 
     private fun showPagedDataFromRemote() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.listData.collect {
+            viewModel.listData.collectLatest {
                 pagedRecyclerAdapter.submitData(it)
             }
         }
@@ -73,5 +77,25 @@ class GithubReposListFragment : Fragment() {
         _binding = null
     }
 
-
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
+    }
 }
