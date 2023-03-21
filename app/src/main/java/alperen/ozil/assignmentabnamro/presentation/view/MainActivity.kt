@@ -25,29 +25,4 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
-    /*private fun setupRecyclerView() {
-
-        pagedRecyclerAdapter = PagedRecyclerAdapter()
-
-        binding.recyclerAlperen.apply {
-            adapter = pagedRecyclerAdapter
-            layoutManager = StaggeredGridLayoutManager(
-                1, StaggeredGridLayoutManager.VERTICAL
-            )
-            setHasFixedSize(true)
-        }
-
-    }
-
-    private fun loadData() {
-
-        lifecycleScope.launch {
-            viewModel.listData.collectLatest {
-                Log.d("aaa", "load: $it")
-                pagedRecyclerAdapter.submitData(it)
-            }
-
-        }
-    }*/
 }

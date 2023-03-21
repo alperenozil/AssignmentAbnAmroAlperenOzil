@@ -12,6 +12,4 @@ interface GithubRepoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addRepo(repo: GithubRepo)
 
-    @Delete
-    suspend fun deleteNote(note: GithubRepo)
 }
